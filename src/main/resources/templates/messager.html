@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+    <style>
+        ul.no-bullet {
+            list-style-type: none;
+        }
+    </style>
+  <title>Переписка</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+<div style="margin: 20px">
+    <input type="hidden" name="userid" value="${userid}">
+    <h5>Переписка</h5>
+    <div style="height: 400px; width: 50%; border: 3px #879AA8 solid">
+        <ul class="no-bullet">
+            <li th:each="message : ${messageList}">
+                <span th:text="'id ' + ${message.sender.id} + ' ' + ${message.messageText}"></span>
+                <span style="font-size: 13px" th:text="' ' + ${message.sentAt.getHour} + ':' + ${message.sentAt.getMinute}"></span>
+                <a th:href="@{'/download?messageId=' + ${message.messageText}}">Скачать</a>
+                <a th:href="@{'/delete?userid=' + ${userid} + '&messageId=' + ${message.id}}"> Удалить</a>
+                <a th:href="@{'/editMessage?userid=' + ${userid} + '&messageId=' + ${message.id}}"> Изменить</a>
+            </li>
+        </ul>
+
+
+    </div>
+    <form th:action="@{'/sendmessage/' + ${userid}}" method="POST">
+        <input type="text" name="message" placeholder="Your message" autofocus="true">
+        <button type="submit">Send Message</button>
+        <a th:href="@{'/downloadAll?userid=' + ${userid}}">Скачать всю переписку</a>
+    </form>
+</div>
+</body>
+</html>
